@@ -19,7 +19,7 @@ dotfiles/
 ## Install (fresh machine, one command)
 
 ```sh
-git clone <repo-url> ~/dotfiles && ~/dotfiles/bootstrap.sh
+git clone https://github.com/atif-talib/dotfiles ~/dotfiles && ~/dotfiles/bootstrap.sh
 ```
 
 `bootstrap.sh` does everything:
