@@ -39,9 +39,10 @@ cd ~/dotfiles
 ./install.sh nvim tmux  # or pick packages
 ```
 
-`install.sh` symlinks each package into `$HOME` and backs up anything it
-would overwrite to `~/.dotfiles-backup/<timestamp>/`. No GNU Stow required,
-but `stow nvim tmux ...` works too.
+`install.sh` is **non-destructive**: it only adds new symlinks. Any path that
+already exists in `$HOME` is left untouched and skipped (printed as `skip:`).
+Nothing is moved, overwritten, or deleted. No GNU Stow required, but
+`stow nvim tmux ...` works too.
 
 ## Post-install
 

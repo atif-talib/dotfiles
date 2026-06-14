@@ -40,14 +40,14 @@ bindkey '^[[B' history-search-forward
 # ---- Eza (better ls) -----
 alias ls="eza --icons=always"
 
-# ---- Zoxide (better cd) ----
-eval "$(zoxide init zsh)"
-
-alias cd="z"
-
 # Created by `pipx` on 2026-01-21 09:23:51
 export PATH="$PATH:/Users/atiftalib/.local/bin"
 
 export STARSHIP_CONFIG="$HOME/.config/starship/starship.toml"
 eval "$(starship init zsh)"
+
+# ---- Zoxide (better cd) ----
+# Must be initialized at the very end of the file (zoxide doctor requirement).
+alias cd="z"
+eval "$(zoxide init zsh)"
 

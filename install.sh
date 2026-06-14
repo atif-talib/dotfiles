@@ -2,7 +2,10 @@
 #
 # Symlink dotfiles into $HOME using a GNU Stow-compatible layout.
 # Each top-level dir is a "package"; its contents mirror paths relative to $HOME.
-# Existing files are backed up to ~/.dotfiles-backup/<timestamp>/ before linking.
+#
+# NON-DESTRUCTIVE: anything that already exists at the destination is left
+# untouched and skipped. This script only ADDS new symlinks; it never moves,
+# overwrites, or deletes existing files. Re-run safe.
 #
 # Usage:
 #   ./install.sh            # link all packages
@@ -12,7 +15,6 @@
 set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-BACKUP_DIR="$HOME/.dotfiles-backup/$(date +%Y%m%d-%H%M%S)"
 
 PACKAGES=("$@")
 if [ ${#PACKAGES[@]} -eq 0 ]; then
@@ -28,21 +30,19 @@ link_package() {
     local rel="${src#"$pkg_dir"/}"
     local dest="$HOME/$rel"
 
-    mkdir -p "$(dirname "$dest")"
-
     # Already correctly linked.
     if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
       echo "ok:   $dest"
       continue
     fi
 
-    # Back up anything in the way.
+    # NON-DESTRUCTIVE: never touch an existing file/dir/symlink. Skip it.
     if [ -e "$dest" ] || [ -L "$dest" ]; then
-      mkdir -p "$(dirname "$BACKUP_DIR/$rel")"
-      mv "$dest" "$BACKUP_DIR/$rel"
-      echo "bak:  $dest -> $BACKUP_DIR/$rel"
+      echo "skip: $dest (already exists, left untouched)"
+      continue
     fi
 
+    mkdir -p "$(dirname "$dest")"
     ln -s "$src" "$dest"
     echo "link: $dest -> $src"
   done < <(find "$pkg_dir" -type f -print0)
@@ -54,4 +54,4 @@ for pkg in "${PACKAGES[@]}"; do
 done
 
 echo
-echo "Done. Backups (if any): $BACKUP_DIR"
+echo "Done. Existing files were left untouched (see 'skip:' lines above)."
