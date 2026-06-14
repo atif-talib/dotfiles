@@ -1,0 +1,10 @@
+[credential]
+	helper = 
+	helper = /usr/local/share/gcm-core/git-credential-manager
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+[user]
+	email = saimbintalib.st@gmail.com
+	name = Atif Talib
+[http]
+	postBuffer = 524288000

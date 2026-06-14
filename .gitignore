@@ -1,0 +1,9 @@
+.DS_Store
+*.swp
+*.bak
+
+# tmux plugins are managed by TPM (prefix + I), not version-controlled here
+tmux/.config/tmux/plugins/
+
+# nvim plugin state managed by lazy.nvim (lazy-lock.json IS tracked for reproducibility)
+nvim/.config/nvim/.git/
