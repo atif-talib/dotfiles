@@ -16,12 +16,26 @@ dotfiles/
 └── git/       .gitconfig
 ```
 
-## Install
+## Install (fresh machine, one command)
 
 ```sh
-git clone <repo-url> ~/dotfiles
+git clone <repo-url> ~/dotfiles && ~/dotfiles/bootstrap.sh
+```
+
+`bootstrap.sh` does everything:
+
+1. Installs Homebrew if missing
+2. Installs all tools/deps from `Brewfile` (nvim, tmux, wezterm, starship, fzf, zoxide, eza, zsh plugins)
+3. Installs [TPM](https://github.com/tmux-plugins/tpm) for tmux
+4. Symlinks every dotfile into place (via `install.sh`)
+
+Idempotent — safe to re-run.
+
+## Symlink only (tools already installed)
+
+```sh
 cd ~/dotfiles
-./install.sh            # symlink everything
+./install.sh            # link everything
 ./install.sh nvim tmux  # or pick packages
 ```
 
@@ -31,12 +45,11 @@ but `stow nvim tmux ...` works too.
 
 ## Post-install
 
-| Tool     | Step |
-|----------|------|
-| tmux     | Install [TPM](https://github.com/tmux-plugins/tpm), then `prefix` + <kbd>I</kbd> to fetch plugins |
-| nvim     | Launch `nvim`; lazy.nvim syncs plugins from `lazy-lock.json` |
-| starship | `brew install starship`; `$STARSHIP_CONFIG` must point at `~/.config/starship/starship.toml` |
-| zsh      | Needs `fzf`, `zoxide`, `eza`, `zsh-syntax-highlighting`, `zsh-autosuggestions` (via brew) |
+| Step | Action |
+|------|--------|
+| shell | `exec zsh` to reload |
+| tmux  | open tmux, `prefix` + <kbd>I</kbd> to fetch plugins |
+| nvim  | first launch syncs plugins from `lazy-lock.json` |
 
 ## Notes
 
