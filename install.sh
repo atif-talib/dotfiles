@@ -16,6 +16,8 @@ set -euo pipefail
 
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+SKIPPED=()
+
 PACKAGES=("$@")
 if [ ${#PACKAGES[@]} -eq 0 ]; then
   PACKAGES=(nvim tmux starship wezterm zsh bash git)
@@ -39,6 +41,7 @@ link_package() {
     # NON-DESTRUCTIVE: never touch an existing file/dir/symlink. Skip it.
     if [ -e "$dest" ] || [ -L "$dest" ]; then
       echo "skip: $dest (already exists, left untouched)"
+      SKIPPED+=("$dest")
       continue
     fi
 
@@ -54,4 +57,13 @@ for pkg in "${PACKAGES[@]}"; do
 done
 
 echo
-echo "Done. Existing files were left untouched (see 'skip:' lines above)."
+if [ ${#SKIPPED[@]} -gt 0 ]; then
+  echo "Skipped ${#SKIPPED[@]} existing file(s) — left untouched:"
+  for f in "${SKIPPED[@]}"; do
+    echo "  - $f"
+  done
+  echo
+  echo "To adopt the repo version, remove the file above and re-run install.sh."
+else
+  echo "Done. Nothing pre-existing — all dotfiles linked."
+fi
